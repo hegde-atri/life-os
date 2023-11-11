@@ -10,7 +10,7 @@ export default async function DashboardLayout({
   const session = await getServerAuthSession();
 
   if (!session?.user.id) {
-    redirect("/");
+    redirect("/")
   }
 
   return (
@@ -20,3 +20,4 @@ export default async function DashboardLayout({
     </>
   );
 }
+
