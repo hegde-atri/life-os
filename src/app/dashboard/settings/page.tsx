@@ -6,7 +6,7 @@ import Categories from './categories/page';
 import Preferences from './preferences/page';
 import Account from './account/page';
 
-export const Settings = () => {
+const Settings = () => {
   return (
   <div>
 <div className="flex flex-col gap-4">
