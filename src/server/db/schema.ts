@@ -33,6 +33,20 @@ export const categories = mysqlTable("category", {
   name: varchar("name", { length: 255 }).notNull(),
 });
 
+export const userCategories = mysqlTable("userCategory", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  userId: varchar("userId", { length: 255 }).notNull(),
+  categoryId: varchar("categoryId", { length: 255 }).notNull(),
+});
+
+export const userCategoriesRelations = relations(userCategories, ({ one }) => ({
+  user: one(users, { fields: [userCategories.userId], references: [users.id] }),
+  category: one(categories, {
+    fields: [userCategories.categoryId],
+    references: [categories.id],
+  }),
+}));
+
 export const tasks = mysqlTable("task", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   userId: varchar("userId", { length: 255 }).notNull(),
