@@ -21,7 +21,6 @@ const Categories = () => {
   ];
   const [categoriesSelected, setCategoriesSelected] = React.useState([]);
   return (
-    <div className="">
       <CheckboxGroup
         className=""
         value={categoriesSelected}
@@ -35,7 +34,6 @@ const Categories = () => {
         ))}
         </div>
       </CheckboxGroup>
-    </div>
   );
 };
 
