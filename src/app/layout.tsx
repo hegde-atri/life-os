@@ -13,7 +13,7 @@ const exo2 = Exo_2({
 
 export const metadata = {
   title: "Life OS",
-  description: "Play our life",
+  description: "Play your life!",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
