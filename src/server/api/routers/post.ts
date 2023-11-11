@@ -5,11 +5,13 @@ import {
 } from "~/server/api/trpc";
 
 export const postRouter = createTRPCRouter({
-  hello: publicProcedure.query(async () => {
-    const resp = await fetch("https://api.sampleapis.com/cartoons/cartoons2D");
-    const json = await resp.json();
+  hello: publicProcedure.query(() => {
+    // const resp: any = await fetch(
+    //   "https://api.sampleapis.com/cartoons/cartoons2D",
+    // );
+    // const json: any = await resp.json();
     return {
-      data: json,
+      data: "hello",
     };
   }),
 
