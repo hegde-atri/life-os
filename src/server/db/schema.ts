@@ -1,6 +1,5 @@
 import { relations, sql } from "drizzle-orm";
 import {
-  bigint,
   index,
   int,
   mysqlTableCreator,
@@ -19,22 +18,44 @@ import { type AdapterAccount } from "next-auth/adapters";
  */
 export const mysqlTable = mysqlTableCreator((name) => `life-os_${name}`);
 
-export const posts = mysqlTable(
-  "post",
-  {
-    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-    name: varchar("name", { length: 256 }),
-    createdById: varchar("createdById", { length: 255 }).notNull(),
-    createdAt: timestamp("created_at")
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updatedAt").onUpdateNow(),
-  },
-  (example) => ({
-    createdByIdIdx: index("createdById_idx").on(example.createdById),
-    nameIndex: index("name_idx").on(example.name),
+export const categories = mysqlTable("category", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+});
+
+export const tasks = mysqlTable("task", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  userId: varchar("userId", { length: 255 }).notNull(),
+  categoryId: varchar("categoryId", { length: 255 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  points: int("points").notNull(),
+  d: varchar("id", { length: 255 }).notNull().primaryKey(),
+});
+
+export const tasksRelations = relations(tasks, ({ one }) => ({
+  user: one(users, { fields: [tasks.userId], references: [users.id] }),
+  category: one(categories, {
+    fields: [tasks.categoryId],
+    references: [categories.id],
   }),
-);
+}));
+
+export const history = mysqlTable("history", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  userId: varchar("userId", { length: 255 }).notNull(),
+  categoryId: varchar("id", { length: 255 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  points: int("points").notNull(),
+  finishedAt: timestamp("finished_at").notNull(),
+});
+
+export const historyRelations = relations(history, ({ one }) => ({
+  user: one(users, { fields: [history.userId], references: [users.id] }),
+  category: one(categories, {
+    fields: [history.categoryId],
+    references: [categories.id],
+  }),
+}));
 
 export const users = mysqlTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
