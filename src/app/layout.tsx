@@ -26,11 +26,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={`${exo2.className}`}>
         <TRPCReactProvider cookies={cookies().toString()}>
-          <Providers>
-            <main className="mx-auto mt-5 w-11/12 scroll-auto md:w-3/4">
-              {children}
-            </main>
-          </Providers>
+          <Providers>{children}</Providers>
         </TRPCReactProvider>
       </body>
     </html>
