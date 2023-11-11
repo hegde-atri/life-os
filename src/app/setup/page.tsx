@@ -37,7 +37,7 @@ const Setup = () => {
               e.preventDefault();
               if (category !== "") {
                 setCategories(categories.concat([category]))
-                
+                setCategory("");
               }
             }
           }}
