@@ -18,6 +18,16 @@ import { type AdapterAccount } from "next-auth/adapters";
  */
 export const mysqlTable = mysqlTableCreator((name) => `life-os_${name}`);
 
+export const profiles = mysqlTable("profile", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  userId: varchar("userId", { length: 255 }).notNull().unique(),
+  points: int("points").notNull(),
+});
+
+export const profilesRelations = relations(profiles, ({ one }) => ({
+  user: one(users, { fields: [profiles.userId], references: [users.id] }),
+}));
+
 export const categories = mysqlTable("category", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
