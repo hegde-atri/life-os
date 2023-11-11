@@ -17,7 +17,6 @@
     "@nextui-org/react": "^2.2.8",
     "@planetscale/database": "^1.11.0",
     "@t3-oss/env-nextjs": "^0.7.0",
-    "@tabler/icons": "^2.40.0",
     "@tanstack/react-query": "^4.32.6",
     "@theme-toggles/react": "^4.1.0",
     "@trpc/client": "^10.37.1",
@@ -31,6 +30,7 @@
     "next-themes": "^0.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.11.0",
     "superjson": "^1.13.1",
     "zod": "^3.22.4"
   },
