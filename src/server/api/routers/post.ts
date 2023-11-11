@@ -8,13 +8,13 @@ import {
 import { posts } from "~/server/db/schema";
 
 export const postRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
+  hello: publicProcedure.query(async () => {
+    const resp = await fetch("https://api.sampleapis.com/cartoons/cartoons2D");
+    const json = await resp.json();
+    return {
+      data: json,
+    };
+  }),
 
   create: protectedProcedure
     .input(z.object({ name: z.string().min(1) }))
