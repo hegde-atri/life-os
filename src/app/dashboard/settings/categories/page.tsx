@@ -4,6 +4,7 @@ import {
   Card,
   Checkbox,
   CheckboxGroup,
+  CheckboxProps,
   Chip,
   tv,
   useCheckbox,
@@ -22,9 +23,8 @@ const Categories = () => {
   const [categoriesSelected, setCategoriesSelected] = React.useState([]);
   return (
       <CheckboxGroup
-        className=""
         value={categoriesSelected}
-        onChange={setCategoriesSelected}
+        onChange={()=>setCategoriesSelected(categoriesSelected)}
       >
         <div className="grid grid-cols-3 gap-7 mx-20">
         {categories.map((category, key) => (
@@ -57,7 +57,12 @@ const checkbox = tv({
   },
 });
 
-export const CustomCheckbox = (props: any) => {
+interface CustomCheckboxProps extends CheckboxProps {
+  // Add any additional props specific to your CustomCheckbox
+  children?: React.ReactNode;
+}
+
+const CustomCheckbox: React.FC<CustomCheckboxProps> = (props) => {
   const {
     children,
     isSelected,
