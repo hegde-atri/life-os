@@ -5,10 +5,10 @@ import ThemeSwitcher from "./_components/ThemeSwitcher";
 
 export default function Home() {
   return (
-    <main className="text-6xl">
+    <div>
       <ThemeSwitcher />
       Life OS
       <Button color="danger">Testing</Button>
-    </main>
+    </div>
   );
 }
