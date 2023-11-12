@@ -85,9 +85,11 @@ const Setup = () => {
               <Spinner color="primary" />
             </motion.div>
           ) : null}
-          {categories.map((category, index) => (
-            <CategoryChip category={category} key={index} index={index} />
-          ))}
+          <div className="my-1 flex flex-col flex-wrap sm:flex-row">
+            {categories.map((category, index) => (
+              <CategoryChip category={category} key={index} index={index} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -105,7 +107,7 @@ const CategoryChip = (props: { category: Category; index: number }) => {
     });
   return (
     <motion.div
-      className="my-2"
+      className="my-2 mr-2"
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.2, delay: 0.1 + props.index * 0.1 }}
