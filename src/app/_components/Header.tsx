@@ -6,7 +6,6 @@ import { redirect } from "next/navigation";
 import { signOut } from "next-auth/react";
 
 export const Header = () => {
-  function directToSettings() { redirect("/dashboard/settings")};
   return (
     <div className="flex m-2 justify-between">
       <div className="p-1 bg-secondary text-primary rounded">
@@ -24,7 +23,7 @@ export const Header = () => {
               </Button>
             </DropdownTrigger>
             <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
-              <DropdownItem key="settings" onClick={() => directToSettings()}>
+              <DropdownItem key="settings" href="/dashboard/settings">
                 Settings
               </DropdownItem>
               <DropdownItem key="signout" color="danger" onClick={()=>signOut()}>
