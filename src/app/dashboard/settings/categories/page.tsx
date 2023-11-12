@@ -25,7 +25,7 @@ const Categories = () => {
   return (
       <CheckboxGroup
         value={categoriesSelected}
-        onChange={setCategoriesSelected}
+        // onChange={setCategoriesSelected}
       >
         <div className="grid grid-cols-3 gap-7 mx-20">
         {categories.map((category, key) => (
