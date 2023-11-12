@@ -3,7 +3,6 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { input } from "@nextui-org/react";
 
 export const profilesRouter = createTRPCRouter({
-
   getProfile: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.profile.findFirst({
       where: {
@@ -30,4 +29,13 @@ export const profilesRouter = createTRPCRouter({
         });
       }
     }),
+
+  getCoins: protectedProcedure.query(async ({ ctx }) => {
+    const user = await ctx.db.profile.findFirst({
+      where: {
+        userId: ctx.session.user.id,
+      },
+    });
+    return user?.points
+  }),
 });

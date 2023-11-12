@@ -4,8 +4,10 @@ import { TbAdjustmentsFilled, TbCoins } from "react-icons/tb";
 import {  Dropdown,  DropdownTrigger,  DropdownMenu,  DropdownSection,  DropdownItem, Button} from "@nextui-org/react";
 import { redirect } from "next/navigation";
 import { signOut } from "next-auth/react";
+import { api } from "~/trpc/react";
 
 export const Header = () => {
+  const {data, isLoading} = api.profile.getProfile.useQuery();
   return (
     <div className="flex m-2 justify-between">
       <div className="p-1 bg-secondary text-primary rounded">
@@ -13,8 +15,8 @@ export const Header = () => {
       </div>
       <h2 className="text-transparent">Nick wuz ere</h2>
       <div className="flex items-center space-x-2">
-        <div className="flex items-center p-1 bg-success text-black rounded">
-          200<TbCoins />
+        <div className="flex items-center p-1 bg-success text-black rounded">{data?.points}
+          <TbCoins />
         </div>
           <Dropdown>
             <DropdownTrigger>
