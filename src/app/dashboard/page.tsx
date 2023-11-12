@@ -2,9 +2,8 @@
 
 import { api } from "~/trpc/react";
 import { Task } from "../_components/Task";
-import { LoadingPage } from "../_components/loading";
 import { motion } from "framer-motion";
-import { Card, CardBody, CardHeader, Chip, Divider } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
 
 const Dashboard = () => {
   const { data: json_tasks, isLoading } = api.post.hello.useQuery();
