@@ -1,7 +1,14 @@
 "use client";
 
-import { TbCoins } from "react-icons/tb";
-import { Card, CardBody, CardHeader, Chip, Divider } from "@nextui-org/react";
+import { TbCoins, TbPencil } from "react-icons/tb";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Chip,
+  Divider,
+} from "@nextui-org/react";
 
 export const Task = (props: {
   category: string;
@@ -13,7 +20,7 @@ export const Task = (props: {
       isPressable
       className="min-w-1/4 -0 m-2 grow"
       onClick={() => {
-        // delete task
+        // add coins - maybe use onPress
       }}
     >
       <CardHeader className="flex justify-between">
