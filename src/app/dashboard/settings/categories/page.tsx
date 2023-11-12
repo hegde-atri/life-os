@@ -20,15 +20,16 @@ const Categories = () => {
     "Eating",
     "Alcohol :P",
   ];
+
   const [categoriesSelected, setCategoriesSelected] = React.useState([]);
   return (
       <CheckboxGroup
         value={categoriesSelected}
-        onChange={() => setCategoriesSelected}
+        onChange={setCategoriesSelected}
       >
         <div className="grid grid-cols-3 gap-7 mx-20">
         {categories.map((category, key) => (
-          <CustomCheckbox className="mx-auto" key={key} value={category}>
+          <CustomCheckbox className="mx-auto" key={key} value={category} >
             {category}
           </CustomCheckbox>
         ))}
