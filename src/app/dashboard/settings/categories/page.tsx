@@ -10,18 +10,32 @@ import {
   useCheckbox,
   VisuallyHidden,
 } from "@nextui-org/react";
-import React from "react";
+import React, { useEffect } from "react";
+import { api } from "~/trpc/react";
+
+interface Category {
+  id: string;
+  name: string;
+}
 
 const Categories = () => {
-  const categories = [
-    "Swimming",
-    "Jumping",
-    "Cooking",
-    "Eating",
-    "Alcohol :P",
-  ];
-
+  const { data: initData, isLoading: initDataLoading} = api.category.getUsersCategories.useQuery();
+  // const categories = [
+  //   "Swimming",
+  //   "Jumping",
+  //   "Cooking",
+  //   "Eating",
+  //   "Alcohol :P",
+  // ];
+  const [categories, setCategories] = React.useState<Category[]> ([]);
   const [categoriesSelected, setCategoriesSelected] = React.useState([]);
+
+  useEffect(() => {
+    if (!initDataLoading && initData) {
+      setCategories(initData);
+    }
+  }, [initData, initDataLoading]);
+
   return (
       <CheckboxGroup
         value={categoriesSelected}
@@ -29,8 +43,8 @@ const Categories = () => {
       >
         <div className="grid grid-cols-3 gap-7 mx-20">
         {categories.map((category, key) => (
-          <CustomCheckbox className="mx-auto" key={key} value={category} >
-            {category}
+          <CustomCheckbox className="mx-auto" key={key} value={category.id} >
+            {category.name}
           </CustomCheckbox>
         ))}
         </div>
