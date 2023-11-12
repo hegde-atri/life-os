@@ -6,12 +6,13 @@ import {
   AutocompleteItem,
   Button,
   Chip,
-  Input,
   Spinner,
 } from "@nextui-org/react";
 import React, { useEffect } from "react";
 import { api } from "~/trpc/react";
 import { LoadingPage, LoadingSpinner } from "../_components/loading";
+import { redirect } from "next/navigation";
+import { useRouter } from "next/router";
 
 interface Category {
   id: string;
@@ -54,6 +55,11 @@ const Setup = () => {
   if (allCategories === undefined) {
     return <LoadingPage />;
   }
+
+  const handleCategories = () => {
+    // prompt chatgpt to create new tasks
+    console.log("hello");
+  };
 
   return (
     <div className="mx-4 flex h-screen flex-col items-center sm:mx-16 md:mx-auto md:max-w-2xl">
@@ -115,6 +121,16 @@ const Setup = () => {
             ))}
           </div>
         </div>
+        {categories.length >= 1 ? (
+          <div className="mt-4 flex space-x-2 sm:mt-16 sm:flex-row sm:justify-end sm:justify-between">
+            <a href="/dashboard" className="flex grow">
+              <Button color="secondary">Dashboard</Button>
+            </a>
+            <Button onClick={() => handleCategories()} color="primary">
+              Next
+            </Button>
+          </div>
+        ) : null}
       </div>
     </div>
   );
