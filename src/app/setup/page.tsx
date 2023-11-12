@@ -2,11 +2,9 @@
 
 import { motion } from "framer-motion";
 import { Button, Chip, Input, Spinner } from "@nextui-org/react";
-import { useSession } from "next-auth/react";
 import React, { useEffect } from "react";
 import { api } from "~/trpc/react";
 import { LoadingSpinner } from "../_components/loading";
-import { redirect } from "next/navigation";
 
 interface Category {
   id: string;
@@ -14,9 +12,6 @@ interface Category {
 }
 
 const Setup = () => {
-  const { data: session } = useSession();
-  console.log(session);
-
   const [categories, setCategories] = React.useState<Category[]>([]);
   const [category, setCategory] = React.useState("");
 
