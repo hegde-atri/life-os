@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import React, { useEffect } from "react";
 import { api } from "~/trpc/react";
 import { LoadingSpinner } from "../_components/loading";
+import { redirect } from "next/navigation";
 
 interface Category {
   id: string;
@@ -13,10 +14,8 @@ interface Category {
 }
 
 const Setup = () => {
-  const session = useSession();
-
-  if (!session?.data?.user) {
-  }
+  const { data: session } = useSession();
+  console.log(session);
 
   const [categories, setCategories] = React.useState<Category[]>([]);
   const [category, setCategory] = React.useState("");
@@ -92,7 +91,7 @@ const Setup = () => {
             </motion.div>
           ) : null}
           {categories.map((category, index) => (
-            <CategoryChip category={category} index={index} />
+            <CategoryChip category={category} key={index} index={index} />
           ))}
         </div>
       </div>
@@ -112,7 +111,6 @@ const CategoryChip = (props: { category: Category; index: number }) => {
   return (
     <motion.div
       className="my-2"
-      key={props.index}
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.2, delay: 0.1 + props.index * 0.1 }}
