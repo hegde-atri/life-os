@@ -4,9 +4,33 @@ import { api } from "~/trpc/react";
 import { Task } from "../_components/Task";
 import { motion } from "framer-motion";
 import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
+import { redirect } from "next/navigation";
 
 const Dashboard = () => {
   const { data: json_tasks, isLoading } = api.post.hello.useQuery();
+
+  const { data, isLoading: categoriesLoading } =
+    api.category.getUsersCategories.useQuery();
+  if (categoriesLoading) {
+    return (
+      <div className="mx-auto mt-16 w-11/12">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <TaskSkeleton />
+          <TaskSkeleton />
+          <TaskSkeleton />
+          <TaskSkeleton />
+          <TaskSkeleton />
+          <TaskSkeleton />
+          <TaskSkeleton />
+          <TaskSkeleton />
+        </div>
+      </div>
+    );
+  }
+
+  if (data?.length === 0) {
+    redirect("/setup");
+  }
 
   if (isLoading) {
     return (
