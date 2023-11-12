@@ -3,7 +3,6 @@
 import { Button } from "@nextui-org/react";
 import { motion } from "framer-motion";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import {
   TbMobiledata,
   TbMoodCheck,
@@ -81,9 +80,9 @@ export default function Home() {
             </div>
           ) : (
             <div className="mx-auto">
-              <Button onClick={() => redirect("/dashboard")} color="primary">
-                Dashboard
-              </Button>
+              <a href="/dashboard">
+                <Button color="primary">Dashboard</Button>
+              </a>
               <motion.p
                 className="text-center"
                 initial={{ opacity: 0, y: 10 }}
