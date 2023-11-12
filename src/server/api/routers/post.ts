@@ -7,26 +7,28 @@ const openai = new OpenAI({
 });
 
 export const postRouter = createTRPCRouter({
-  hello: publicProcedure.query( async () => {
-    const count = 2;
+  hello: publicProcedure.query(async () => {
+    // const count = 2;
 
-    const chatCompletion = await openai.chat.completions.create({
-      messages: [
-        {
-          role: "system",
-          content:
-            `Generate ${count} *self-enclosing* personal development tasks that someone could do for each category provided, assign each a corresponding difficulty value (0-40). Format json: {category: {task: value, task: value...},}. Don't add markdown. Eg. {"Swimming": {"Swim 500m non-stop": 15,...},}`,
-        },
-        {
-          role: "user",
-          content: "Uni Work, Programming, Swimming, over sleeping",
-        },
-      ],
-      model: "gpt-3.5-turbo-1106",
-    });
+    // const chatCompletion = await openai.chat.completions.create({
+    //   messages: [
+    //     {
+    //       role: "system",
+    //       content: `Generate ${count} *self-enclosing* personal development tasks that someone could do for each category provided, assign each a corresponding difficulty value (0-40). Format json: {category: {task: value, task: value...},}. Don't add markdown. Eg. {"Swimming": {"Swim 500m non-stop": 15,...},}`,
+    //     },
+    //     {
+    //       role: "user",
+    //       content: "Uni Work, Programming, Swimming, over sleeping",
+    //     },
+    //   ],
+    //   model: "gpt-3.5-turbo-1106",
+    // });
+
+    // console.log(chatCompletion.choices[0]?.message.content);
 
     return {
-      data: JSON.parse(chatCompletion.choices[0]?.message.content!),
+      data: "message",
+      // data: JSON.parse(chatCompletion.choices[0]?.message.content!),
     };
   }),
 });
