@@ -10,17 +10,14 @@ export default function Home() {
   if (json_tasks == undefined) {
     return <></>;
   }
-  
+
   return (
     <main className="text-medium">
-      <div className="gap-2 grid grid-cols-2 sm:grid-cols-4">
-        {Object.entries(json_tasks.data).map(
-          ([category, rest]) =>
-            Object.entries(rest).map(
-              ([task, value]) => (
-                <Task category={category} task={task} value={value} />
-              ),
-            ),
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        {Object.entries(json_tasks.data).map(([category, rest]) =>
+          Object.entries(rest).map(([task, value]) => (
+            <Task category={category} task={task} value={value} />
+          )),
         )}
       </div>
     </main>
