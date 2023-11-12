@@ -18,7 +18,7 @@ export const Task = (props: {
   return (
     <Card
       isPressable
-      className="min-w-1/4 -0 m-2 grow"
+      className="min-w-1/4 m-2 grow p-0"
       onClick={() => {
         // add coins - maybe use onPress
       }}

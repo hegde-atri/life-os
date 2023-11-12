@@ -52,7 +52,7 @@ const Dashboard = () => {
   return (
     <div className="mx-auto mt-16 w-11/12">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {Object.entries(json_tasks!.data).map(([category, rest], index1) =>
+        {Object.entries(json_tasks?.data).map(([category, rest], index1) =>
           Object.entries(rest).map(([task, value], index2) => (
             <motion.div
               className="flex"

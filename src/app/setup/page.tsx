@@ -32,6 +32,8 @@ const Setup = () => {
     api.category.create.useMutation({
       onSuccess: () => {
         void utils.category.getUsersCategories.invalidate();
+        // create tasks for a given category
+        api.
       },
     });
 
@@ -55,11 +57,6 @@ const Setup = () => {
   if (allCategories === undefined) {
     return <LoadingPage />;
   }
-
-  const handleCategories = () => {
-    // prompt chatgpt to create new tasks
-    console.log("hello");
-  };
 
   return (
     <div className="mx-4 flex h-screen flex-col items-center sm:mx-16 md:mx-auto md:max-w-2xl">
@@ -126,9 +123,6 @@ const Setup = () => {
             <a href="/dashboard" className="flex grow">
               <Button color="secondary">Dashboard</Button>
             </a>
-            <Button onClick={() => handleCategories()} color="primary">
-              Next
-            </Button>
           </div>
         ) : null}
       </div>
