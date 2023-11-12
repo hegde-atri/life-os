@@ -1,4 +1,8 @@
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 
 import OpenAI from "openai";
 
@@ -7,7 +11,7 @@ const openai = new OpenAI({
 });
 
 export const postRouter = createTRPCRouter({
-  hello: publicProcedure.query(async () => {
+  hello: protectedProcedure.query(async () => {
     // const count = 2;
 
     // const chatCompletion = await openai.chat.completions.create({

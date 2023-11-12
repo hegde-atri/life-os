@@ -6,13 +6,15 @@ import { Card, CardBody, CardHeader, Chip, Divider } from "@nextui-org/react";
 export const Task = (props: {
   category: string;
   task: string;
-  value: number;
+  value: string;
 }) => {
   return (
     <Card
       isPressable
-      className="m-2 max-w-xs p-0"
-      onClick={() => console.log("h")}
+      className="min-w-1/4 -0 m-2 grow"
+      onClick={() => {
+        // delete task
+      }}
     >
       <CardHeader className="flex justify-between">
         <Chip color="primary">{props.category}</Chip>
