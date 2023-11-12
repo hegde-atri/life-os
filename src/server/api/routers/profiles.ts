@@ -3,9 +3,6 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { input } from "@nextui-org/react";
 
 export const profilesRouter = createTRPCRouter({
-  getAll: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.profile.findMany();
-  }),
 
   getProfile: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.profile.findFirst({
