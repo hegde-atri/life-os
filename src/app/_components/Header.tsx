@@ -10,9 +10,9 @@ export const Header = () => {
   const {data, isLoading} = api.profile.getProfile.useQuery();
   return (
     <div className="flex m-2 justify-between">
-      <div className="p-1 bg-secondary text-primary rounded">
+      <a href="/" className="p-1 bg-secondary text-primary rounded">
         <h1>LifeOS</h1>
-      </div>
+      </a>
       <h2 className="text-transparent">Nick wuz ere</h2>
       <div className="flex items-center space-x-2">
         <div className="flex items-center p-1 bg-success text-black rounded">{data?.points}

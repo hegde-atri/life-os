@@ -9,8 +9,6 @@ import {
   Chip,
   Divider,
 } from "@nextui-org/react";
-import { TbCoins } from "react-icons/tb";
-import { Button, Card, CardBody, CardHeader, Chip, Divider } from "@nextui-org/react";
 import { api } from "~/trpc/react";
 
 export const Task = (props: {
