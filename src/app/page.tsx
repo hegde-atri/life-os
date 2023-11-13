@@ -8,6 +8,7 @@ import {
   TbMoodCheck,
   TbTimelineEventExclamation,
 } from "react-icons/tb";
+import ThemeSwitcher from "./_components/ThemeSwitcher";
 
 export default function Home() {
   let session = useSession();
@@ -99,6 +100,7 @@ export default function Home() {
               </motion.p>
             </div>
           )}
+          <ThemeSwitcher />
         </motion.div>
       </div>
     </main>
