@@ -1,7 +1,6 @@
 import {
   createTRPCRouter,
   protectedProcedure,
-  publicProcedure,
 } from "~/server/api/trpc";
 
 import OpenAI from "openai";
@@ -12,16 +11,53 @@ const openai = new OpenAI({
 });
 
 export const tasksRouter = createTRPCRouter({
-  generateTasks: protectedProcedure.input(
-    z.object({
-      categories: z.array(z.string()),
-      countForEach: z.number().default(2),
-    }),
-  ).query(async ({ ctx, input }) => {
+  generateTasks: protectedProcedure.query(async ({ ctx }) => {
+    // Fetch user categories
+    // Copied from categories.ts (idk how to call from within)
+    const userCategories = await ctx.db.userCategory.findMany({
+      where: {
+        userId: ctx.session.user.id,
+      },
+    });
+    const categoryIds = userCategories.map(
+      (userCategory) => userCategory.categoryId,
+    );
+    const categories = await ctx.db.category.findMany({
+      where: { id: { in: categoryIds } },
+    });
+
+    // Temporary funciton while the db is full of crap.
+    // Ideally would remove in prod, however max length enforcment is a must.
+    function cleanCategories(dirtyCategories: { id: string; name: string }[]) {
+      let validCategories: string[] = [];
+      for (let category of dirtyCategories) {
+        if (category.name.length <= 16) {
+          validCategories.push(category.name);
+        }
+      }
+      return validCategories;
+    }
+
+    interface Task {
+      category: string;
+      task: string;
+      points: number;
+    }
+
+    let tasks: Task[] = [];
+
+    const validCategories = cleanCategories(categories);
+    console.log("validCategories", validCategories)
 
     // Handle case where user has no selected categories and prevent api call
-    if (input.categories.length == 0) {
-      return { tasks: [] };
+    if (validCategories.length == 0) {
+      tasks.push({
+        category: "Error",
+        task: "No valid categories selected!",
+        points: 0,
+      });
+      console.log(tasks)
+      return { tasks: tasks };
     }
 
     const count = 2;
@@ -35,7 +71,7 @@ export const tasksRouter = createTRPCRouter({
         },
         {
           role: "user",
-          content: input.categories.toString(),
+          content: validCategories.toString(),
         },
       ],
       model: "gpt-3.5-turbo-1106",
@@ -44,14 +80,6 @@ export const tasksRouter = createTRPCRouter({
     const GPTObj = JSON.parse(chatCompletion.choices[0]?.message.content!);
 
     console.log(GPTObj);
-
-    interface Task {
-      category: string;
-      task: string;
-      points: number;
-    }
-
-    let tasks: Task[] = [];
 
     for (let category in GPTObj) {
       for (let task in GPTObj[category]) {
@@ -63,7 +91,7 @@ export const tasksRouter = createTRPCRouter({
       }
     }
 
-    console.log(tasks);
+    // console.log(tasks);
 
     return { tasks: tasks };
   }),
