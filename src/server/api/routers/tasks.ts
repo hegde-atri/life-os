@@ -11,8 +11,19 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export const postRouter = createTRPCRouter({
-  hello: protectedProcedure.query(async () => {
+export const tasksRouter = createTRPCRouter({
+  generateTasks: protectedProcedure.input(
+    z.object({
+      categories: z.array(z.string()),
+      countForEach: z.number().default(2),
+    }),
+  ).query(async ({ ctx, input }) => {
+
+    // Handle case where user has no selected categories and prevent api call
+    if (input.categories.length == 0) {
+      return { tasks: [] };
+    }
+
     const count = 2;
 
     const chatCompletion = await openai.chat.completions.create({
@@ -24,18 +35,37 @@ export const postRouter = createTRPCRouter({
         },
         {
           role: "user",
-          content: "Uni Work, Programming, Swimming, over sleeping",
+          content: input.categories.toString(),
         },
       ],
       model: "gpt-3.5-turbo-1106",
     });
 
-    console.log(chatCompletion.choices[0]?.message.content);
+    const GPTObj = JSON.parse(chatCompletion.choices[0]?.message.content!);
 
-    return {
-      // data: "message",
-      data: JSON.parse(chatCompletion.choices[0]?.message.content!),
-    };
+    console.log(GPTObj);
+
+    interface Task {
+      category: string;
+      task: string;
+      points: number;
+    }
+
+    let tasks: Task[] = [];
+
+    for (let category in GPTObj) {
+      for (let task in GPTObj[category]) {
+        tasks.push({
+          category: category,
+          task: task,
+          points: GPTObj[category][task],
+        });
+      }
+    }
+
+    console.log(tasks);
+
+    return { tasks: tasks };
   }),
 
   createTask: protectedProcedure
@@ -56,7 +86,7 @@ export const postRouter = createTRPCRouter({
         categoryId = categoryFromName.id;
       } else {
         categoryFromName = await ctx.db.category.findFirst();
-        categoryId = categoryFromName?.id!
+        categoryId = categoryFromName?.id!;
       }
 
       await ctx.db.task.create({

@@ -1,16 +1,25 @@
 "use client";
 
 import { api } from "~/trpc/react";
-import { Task } from "../_components/Task";
-import { motion } from "framer-motion";
 import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
 import { redirect } from "next/navigation";
+import { TaskModal } from "../_components/TaskModal";
 
 const Dashboard = () => {
-  const { data: json_tasks, isLoading } = api.post.hello.useQuery();
+  const { data: categoryData, isLoading: categoriesLoading } = api.category
+    .getUsersCategories
+    .useQuery(undefined, {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    });
 
-  const { data, isLoading: categoriesLoading } =
-    api.category.getUsersCategories.useQuery();
+  
+
+  const { data: taskData, isLoading: tasksLoading } = api.tasks.generateTasks
+    .useQuery({
+      categories: cleanCategories(categoryData),
+    }, { refetchOnMount: false, refetchOnWindowFocus: false });
+
   if (categoriesLoading) {
     return (
       <div className="mx-auto mt-16 w-11/12">
@@ -28,11 +37,11 @@ const Dashboard = () => {
     );
   }
 
-  if (data?.length === 0) {
+  if (categoryData?.length === 0) {
     redirect("/setup");
   }
 
-  if (isLoading) {
+  if (tasksLoading) {
     return (
       <div className="mx-auto mt-16 w-11/12">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -49,28 +58,56 @@ const Dashboard = () => {
     );
   }
 
+  console.log("**CATEGORY DATA**");
+  for (let category of categoryData!) {
+    console.log(category.name)
+  }
+
+  interface Task {
+    category: string;
+    task: string;
+    points: number;
+  }
+
+  const tasks: Task[] = taskData?.tasks!;
+
   return (
     <div className="mx-auto mt-16 w-11/12">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {Object.entries(json_tasks?.data).map(([category, rest], index1) =>
-          Object.entries(rest).map(([task, value], index2) => (
-            <motion.div
-              className="flex"
-              key={task}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{
-                duration: 0.3,
-                delay: 0.1 + (index1 + index2) / 10,
-              }}
-            >
-              <Task category={category} task={task} value={value} />
-            </motion.div>
-          )),
-        )}
+        {tasks.map((taskObj: Task, index) => (
+          <TaskModal
+            key={index}
+            category={taskObj.category}
+            task={taskObj.task}
+            points={taskObj.points}
+          />
+        ))}
       </div>
     </div>
   );
+
+  // return (
+  //   <div className="mx-auto mt-16 w-11/12">
+  //     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+  //       {Object.entries(json_tasks?.data).map(([category, rest], index1) =>
+  //         Object.entries(rest).map(([task, value], index2) => (
+  //           <motion.div
+  //             className="flex"
+  //             key={task}
+  //             initial={{ opacity: 0, x: -10 }}
+  //             animate={{ opacity: 1, x: 0 }}
+  //             transition={{
+  //               duration: 0.3,
+  //               delay: 0.1 + (index1 + index2) / 10,
+  //             }}
+  //           >
+  //             <Task category={category} task={task} value={value} />
+  //           </motion.div>
+  //         ))
+  //       )}
+  //     </div>
+  //   </div>
+  // );
 };
 
 const TaskSkeleton = () => {
