@@ -1,8 +1,7 @@
 "use client";
 
-import { TbCoins, TbPencil } from "react-icons/tb";
+import { TbCoins } from "react-icons/tb";
 import {
-  Button,
   Card,
   CardBody,
   CardHeader,
@@ -14,7 +13,7 @@ import { api } from "~/trpc/react";
 export const Task = (props: {
   category: string;
   task: string;
-  value: string;
+  points: number;
 }) => {
 
   const { mutate } = api.profile.addCoins.useMutation({
@@ -31,7 +30,7 @@ export const Task = (props: {
       <CardHeader className="flex justify-between">
         <Chip color="primary">{props.category}</Chip>
         <div className="flex items-center">
-          {props.value}
+          {props.points}
           <TbCoins />
         </div>
       </CardHeader>

@@ -17,7 +17,7 @@ import { Task } from "./Task";
 export const TaskModal = (props: {
   category: string;
   task: string;
-  value: string;
+  points: number;
 }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -26,7 +26,7 @@ export const TaskModal = (props: {
       <Button isIconOnly onPress={onOpen} className="absolute -top-4 right-14 z-50 opacity-70 rounded-full">
         <TbPencil />
       </Button>
-      <Task category={props.category} task={props.task} value={props.value}/>
+      <Task category={props.category} task={props.task} points={props.points}/>
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
@@ -43,7 +43,7 @@ export const TaskModal = (props: {
                   <Chip color="primary">{props.category}</Chip>
                   <Input
                     type="number"
-                    defaultValue={props.value}
+                    defaultValue={props.points.toString()}
                     labelPlacement="outside"
                     startContent={
                       <div className="pointer-events-none flex items-center">

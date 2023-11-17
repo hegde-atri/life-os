@@ -1,21 +1,22 @@
 "use client";
 
 import { api } from "~/trpc/react";
-import { Task } from "../_components/Task";
-import { motion } from "framer-motion";
 import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
 import { redirect } from "next/navigation";
 import { TaskModal } from "../_components/TaskModal";
+import { motion } from "framer-motion";
 
 const Dashboard = () => {
-  const { data: json_tasks, isLoading } = api.post.hello.useQuery();
+  const { data: taskData, isLoading: tasksLoading } =
+    api.tasks.generateTasks.useQuery(undefined, {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    });
 
-  const { data, isLoading: categoriesLoading } =
-    api.category.getUsersCategories.useQuery();
-  if (categoriesLoading) {
+  if (tasksLoading) {
     return (
       <div className="mx-auto mt-16 w-11/12">
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           <TaskSkeleton />
           <TaskSkeleton />
           <TaskSkeleton />
@@ -29,14 +30,16 @@ const Dashboard = () => {
     );
   }
 
-  if (data?.length === 0) {
-    redirect("/setup");
+  interface Task {
+    category: string;
+    task: string;
+    points: number;
   }
 
   if (isLoading) {
     return (
       <div className="mx-auto mt-16 w-11/12">
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           <TaskSkeleton />
           <TaskSkeleton />
           <TaskSkeleton />
@@ -50,25 +53,30 @@ const Dashboard = () => {
     );
   }
 
+  const tasks: Task[] = taskData?.tasks!;
+
   return (
     <div className="mx-auto mt-16 w-11/12">
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        {Object.entries(json_tasks?.data).map(([category, rest], index1) =>
-          Object.entries(rest).map(([task, value], index2) => (
-            <motion.div
-              className="flex"
-              key={task}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{
-                duration: 0.3,
-                delay: 0.1 + (index1 + index2) / 10,
-              }}
-            >
-              <TaskModal category={category} task={task} value={value} />
-            </motion.div>
-          )),
-        )}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {tasks.map((taskObj: Task, index) => (
+          <motion.div
+            className="flex"
+            key={index}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{
+              duration: 0.3,
+              delay: 0.1 + index / 10,
+            }}
+          >
+            <TaskModal
+              key={index}
+              category={taskObj.category}
+              task={taskObj.task}
+              points={taskObj.points}
+            />
+          </motion.div>
+        ))}
       </div>
     </div>
   );

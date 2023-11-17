@@ -1,7 +1,6 @@
 import {
   createTRPCRouter,
   protectedProcedure,
-  publicProcedure,
 } from "~/server/api/trpc";
 
 import OpenAI from "openai";
@@ -11,8 +10,56 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export const postRouter = createTRPCRouter({
-  hello: protectedProcedure.query(async () => {
+export const tasksRouter = createTRPCRouter({
+  generateTasks: protectedProcedure.query(async ({ ctx }) => {
+    // Fetch user categories
+    // Copied from categories.ts (idk how to call from within)
+    const userCategories = await ctx.db.userCategory.findMany({
+      where: {
+        userId: ctx.session.user.id,
+      },
+    });
+    const categoryIds = userCategories.map(
+      (userCategory) => userCategory.categoryId,
+    );
+    const categories = await ctx.db.category.findMany({
+      where: { id: { in: categoryIds } },
+    });
+
+    // Temporary funciton while the db is full of crap.
+    // Ideally would remove in prod, however max length enforcment is a must.
+    function cleanCategories(dirtyCategories: { id: string; name: string }[]) {
+      let validCategories: string[] = [];
+      for (let category of dirtyCategories) {
+        if (category.name.length <= 16) {
+          validCategories.push(category.name);
+        }
+      }
+      return validCategories;
+    }
+
+    interface Task {
+      category: string;
+      task: string;
+      points: number;
+    }
+
+    let tasks: Task[] = [];
+
+    const validCategories = cleanCategories(categories);
+    console.log("validCategories", validCategories)
+
+    // Handle case where user has no selected categories and prevent api call
+    if (validCategories.length == 0) {
+      tasks.push({
+        category: "Error",
+        task: "No valid categories selected!",
+        points: 0,
+      });
+      console.log(tasks)
+      return { tasks: tasks };
+    }
+
     const count = 2;
 
     const chatCompletion = await openai.chat.completions.create({
@@ -24,18 +71,29 @@ export const postRouter = createTRPCRouter({
         },
         {
           role: "user",
-          content: "Uni Work, Programming, Swimming, over sleeping",
+          content: validCategories.toString(),
         },
       ],
       model: "gpt-3.5-turbo-1106",
     });
 
-    console.log(chatCompletion.choices[0]?.message.content);
+    const GPTObj = JSON.parse(chatCompletion.choices[0]?.message.content!);
 
-    return {
-      // data: "message",
-      data: JSON.parse(chatCompletion.choices[0]?.message.content!),
-    };
+    console.log(GPTObj);
+
+    for (let category in GPTObj) {
+      for (let task in GPTObj[category]) {
+        tasks.push({
+          category: category,
+          task: task,
+          points: GPTObj[category][task],
+        });
+      }
+    }
+
+    // console.log(tasks);
+
+    return { tasks: tasks };
   }),
 
   createTask: protectedProcedure
@@ -56,7 +114,7 @@ export const postRouter = createTRPCRouter({
         categoryId = categoryFromName.id;
       } else {
         categoryFromName = await ctx.db.category.findFirst();
-        categoryId = categoryFromName?.id!
+        categoryId = categoryFromName?.id!;
       }
 
       await ctx.db.task.create({
