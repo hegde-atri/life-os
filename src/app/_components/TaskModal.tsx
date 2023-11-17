@@ -41,6 +41,7 @@ export const TaskModal = (props: {
                 <div className="flex justify-between items-center gap-2">
                   <Chip color="primary">{props.category}</Chip>
                   <Input
+                    className="w-unit-24"
                     type="number"
                     defaultValue={props.points.toString()}
                     labelPlacement="outside"

@@ -23,7 +23,7 @@ export const Task = (props: {
   return (
     <Card
       isPressable
-      className="w-full"
+      fullWidth={true}
       onClick={() => {
         mutate({coinIncrease: props.points})
       }}

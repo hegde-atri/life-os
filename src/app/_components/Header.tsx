@@ -2,19 +2,24 @@
 
 import { TbAdjustmentsFilled, TbCoins } from "react-icons/tb";
 import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownSection,
-  DropdownItem,
   Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
 } from "@nextui-org/react";
-import { redirect } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { api } from "~/trpc/react";
 
 export const Header = () => {
-  const { data, isLoading } = api.profile.getProfile.useQuery();
+  const { data, isLoading } = api.profile.getPoints.useQuery();
+  let coinsDisplay: String;
+
+  if (isLoading) {
+    coinsDisplay = "...";
+  }
+  coinsDisplay = data?.points?.toString()!;
+
   return (
     <div className="m-2 flex justify-between">
       <a href="/" className="rounded bg-secondary p-1 text-primary">
@@ -23,7 +28,7 @@ export const Header = () => {
       <h2 className="text-transparent">Nick wuz ere</h2>
       <div className="flex items-center space-x-2">
         <div className="flex items-center rounded bg-success p-1 text-black">
-          {data?.points}
+          {coinsDisplay}
           <TbCoins />
         </div>
         <Dropdown>
