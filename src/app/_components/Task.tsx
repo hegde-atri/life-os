@@ -7,6 +7,7 @@ import {
   CardHeader,
   Chip,
   Divider,
+  Spacer,
 } from "@nextui-org/react";
 import { api } from "~/trpc/react";
 
@@ -22,9 +23,9 @@ export const Task = (props: {
   return (
     <Card
       isPressable
-      className="min-w-1/4 m-2 grow p-0"
+      className="w-full"
       onClick={() => {
-        mutate({coinIncrease: parseInt(props.value)})
+        mutate({coinIncrease: props.points})
       }}
     >
       <CardHeader className="flex justify-between">
@@ -32,6 +33,7 @@ export const Task = (props: {
         <div className="flex items-center">
           {props.points}
           <TbCoins />
+          <Spacer/>
         </div>
       </CardHeader>
       <Divider />

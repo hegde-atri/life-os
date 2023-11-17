@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Button,
-  Checkbox,
   Chip,
   Input,
   Modal,
@@ -22,8 +21,8 @@ export const TaskModal = (props: {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
-    <div className="flex-col relative">
-      <Button isIconOnly onPress={onOpen} className="absolute -top-4 right-14 z-50 opacity-70 rounded-full">
+    <div className="relative">
+      <Button isIconOnly onPress={onOpen} className="absolute -top-4 -right-4 z-50 opacity-85 rounded-full">
         <TbPencil />
       </Button>
       <Task category={props.category} task={props.task} points={props.points}/>

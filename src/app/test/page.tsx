@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { TaskModal } from "../_components/TaskModal";
 export default function Home() {
   // const { data: json_tasks, isLoading } = api.post.hello.useQuery();
 
@@ -8,5 +9,16 @@ export default function Home() {
   // return <></>;
   // }
 
-  return <main className="text-medium"></main>;
+  return (
+    <main className="text-medium">
+      <div className="mx-auto mt-16 w-11/12">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <TaskModal category="Swimming" task="Get good" points={10} />
+          <TaskModal category="Swimming" task="Get good" points={10} />
+          <TaskModal category="Swimming" task="Get good" points={10} />
+          <TaskModal category="Swimming" task="Get good" points={10} />
+        </div>
+      </div>
+    </main>
+  );
 }
