@@ -13,12 +13,20 @@ export default function Home() {
     <main className="text-medium">
       <div className="mx-auto mt-16 w-11/12">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          <TaskModal category="Swimming" task="Get good" points={10} />
-          <TaskModal category="Swimming" task="Get good" points={10} />
-          <TaskModal category="Swimming" task="Get good" points={10} />
-          <TaskModal category="Swimming" task="Get good" points={10} />
+          <div className="relative">
+            <TaskModal category="Swimming" task="Get good" points={10} />
+          </div>
+          <div className="relative">
+            <TaskModal category="Swimming" task="Get good" points={10} />
+          </div>
+          <div className="relative">
+            <TaskModal category="Swimming" task="Get good" points={10} />
+          </div>
+          <div className="relative">
+            <TaskModal category="Swimming" task="Get good" points={10} />
+          </div>
+          </div>
         </div>
-      </div>
     </main>
   );
 }

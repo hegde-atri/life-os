@@ -21,7 +21,7 @@ export const TaskModal = (props: {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
-    <div className="relative">
+    <>
       <Button isIconOnly onPress={onOpen} className="absolute -top-4 -right-4 z-50 opacity-85 rounded-full">
         <TbPencil />
       </Button>
@@ -69,6 +69,6 @@ export const TaskModal = (props: {
           )}
         </ModalContent>
       </Modal>
-    </div>
+    </>
   );
 };

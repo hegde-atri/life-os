@@ -6,8 +6,8 @@ import { TaskModal } from "../_components/TaskModal";
 import { motion } from "framer-motion";
 
 const Dashboard = () => {
-  const { data: taskData, isLoading: tasksLoading } =
-    api.tasks.generateTasks.useQuery(undefined, {
+  const { data: taskData, isLoading: tasksLoading } = api.tasks.generateTasks
+    .useQuery(undefined, {
       refetchOnMount: false,
       refetchOnWindowFocus: false,
     });
@@ -39,10 +39,10 @@ const Dashboard = () => {
 
   return (
     <div className="mx-auto mt-16 w-11/12">
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {tasks.map((taskObj: Task, index) => (
           <motion.div
-            className="flex"
+            className="relative"
             key={index}
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
