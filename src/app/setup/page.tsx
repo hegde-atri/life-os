@@ -33,7 +33,6 @@ const Setup = () => {
       onSuccess: () => {
         void utils.category.getUsersCategories.invalidate();
         // create tasks for a given category
-        api.
       },
     });
 
