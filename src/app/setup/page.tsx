@@ -1,10 +1,18 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Button, Chip, Input, Spinner } from "@nextui-org/react";
+import {
+  Autocomplete,
+  AutocompleteItem,
+  Button,
+  Chip,
+  Spinner,
+} from "@nextui-org/react";
 import React, { useEffect } from "react";
 import { api } from "~/trpc/react";
-import { LoadingSpinner } from "../_components/loading";
+import { LoadingPage, LoadingSpinner } from "../_components/loading";
+import { redirect } from "next/navigation";
+import { useRouter } from "next/router";
 
 interface Category {
   id: string;
@@ -24,14 +32,30 @@ const Setup = () => {
     api.category.create.useMutation({
       onSuccess: () => {
         void utils.category.getUsersCategories.invalidate();
+        // create tasks for a given category
       },
     });
+
+  const { data: allCategories, isLoading: categoriesLoading } =
+    api.category.getAll.useQuery();
 
   useEffect(() => {
     if (!initDataLoading && initData) {
       setCategories(initData);
     }
   }, [initData, initDataLoading]);
+
+  const onSelectionChange = (id: string) => {
+    setCategory(id);
+  };
+
+  const onInputChange = (value: string) => {
+    setCategory(value);
+  };
+
+  if (allCategories === undefined) {
+    return <LoadingPage />;
+  }
 
   return (
     <div className="mx-4 flex h-screen flex-col items-center sm:mx-16 md:mx-auto md:max-w-2xl">
@@ -42,26 +66,28 @@ const Setup = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <Input
+          <Autocomplete
             radius="sm"
-            size="md"
             className=""
             disabled={isCreating}
+            isLoading={categoriesLoading}
             label="Category"
             type="text"
             value={category}
+            allowsCustomValue={true}
+            allowsEmptyCollection
             placeholder="Enter a category..."
-            onChange={(e) => setCategory(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                if (category !== "") {
-                  createCategory({ name: category });
-                  setCategory("");
-                }
-              }
-            }}
-          />
+            onSelectionChange={() => onSelectionChange}
+            onInputChange={onInputChange}
+          >
+            {allCategories.map((category) => {
+              return (
+                <AutocompleteItem color="primary" key={category.name}>
+                  {category.name}
+                </AutocompleteItem>
+              );
+            })}
+          </Autocomplete>
           <Button
             isLoading={isCreating}
             disabled={isCreating}
@@ -69,7 +95,7 @@ const Setup = () => {
               createCategory({ name: category });
               setCategory("");
             }}
-            className="w-6 bg-transparent"
+            className="w-6 bg-transparent text-4xl"
           >
             {isCreating ? null : "+"}
           </Button>
@@ -91,6 +117,13 @@ const Setup = () => {
             ))}
           </div>
         </div>
+        {categories.length >= 1 ? (
+          <div className="mt-4 flex space-x-2 sm:mt-16 sm:flex-row sm:justify-end sm:justify-between">
+            <a href="/dashboard" className="flex grow">
+              <Button color="secondary">Dashboard</Button>
+            </a>
+          </div>
+        ) : null}
       </div>
     </div>
   );

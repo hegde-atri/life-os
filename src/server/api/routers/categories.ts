@@ -7,7 +7,7 @@ export const categoriesRouter = createTRPCRouter({
   }),
 
   create: protectedProcedure
-    .input(z.object({ name: z.string().min(1) }))
+    .input(z.object({ name: z.string().min(1).max(50) }))
     .mutation(async ({ input, ctx }) => {
       // First check if that category exists
       const existing = await ctx.db.category.findUnique({
