@@ -2,17 +2,21 @@
 
 import { api } from "~/trpc/react";
 import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
+import { redirect } from "next/navigation";
 import { TaskModal } from "../_components/TaskModal";
 import { motion } from "framer-motion";
 
 const Dashboard = () => {
-  const { data: taskData, isLoading: tasksLoading } = api.tasks.generateTasks
-    .useQuery(undefined, { refetchOnMount: false, refetchOnWindowFocus: false });
+  const { data: taskData, isLoading: tasksLoading } =
+    api.tasks.generateTasks.useQuery(undefined, {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    });
 
   if (tasksLoading) {
     return (
       <div className="mx-auto mt-16 w-11/12">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           <TaskSkeleton />
           <TaskSkeleton />
           <TaskSkeleton />
@@ -30,6 +34,23 @@ const Dashboard = () => {
     category: string;
     task: string;
     points: number;
+  }
+
+  if (isLoading) {
+    return (
+      <div className="mx-auto mt-16 w-11/12">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <TaskSkeleton />
+          <TaskSkeleton />
+          <TaskSkeleton />
+          <TaskSkeleton />
+          <TaskSkeleton />
+          <TaskSkeleton />
+          <TaskSkeleton />
+          <TaskSkeleton />
+        </div>
+      </div>
+    );
   }
 
   const tasks: Task[] = taskData?.tasks!;

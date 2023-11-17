@@ -8,6 +8,7 @@ import {
   TbMoodCheck,
   TbTimelineEventExclamation,
 } from "react-icons/tb";
+import ThemeSwitcher from "./_components/ThemeSwitcher";
 
 export default function Home() {
   let session = useSession();
@@ -27,7 +28,7 @@ export default function Home() {
             className="flex flex-col items-center sm:mx-auto sm:flex-row sm:space-x-8"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.7 }}
+            transition={{ duration: 0.3, delay: 0.5 }}
           >
             <TbMobiledata size={42} />
             <p>Balance your activites</p>
@@ -36,7 +37,7 @@ export default function Home() {
             className="flex flex-col items-center sm:mx-auto sm:flex-row sm:space-x-8"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.5 }}
+            transition={{ duration: 0.3, delay: 0.7 }}
           >
             <TbTimelineEventExclamation size={42} />
             <p>Prioritise tasks that matter</p>
@@ -80,8 +81,8 @@ export default function Home() {
             </div>
           ) : (
             <div className="mx-auto">
-              <a href="/dashboard">
-                <Button color="primary">Dashboard</Button>
+              <a href="/setup">
+                <Button color="primary">Setup</Button>
               </a>
               <motion.p
                 className="text-center"
@@ -99,6 +100,7 @@ export default function Home() {
               </motion.p>
             </div>
           )}
+          <ThemeSwitcher />
         </motion.div>
       </div>
     </main>

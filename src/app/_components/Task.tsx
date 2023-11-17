@@ -8,18 +8,23 @@ import {
   Chip,
   Divider,
 } from "@nextui-org/react";
+import { api } from "~/trpc/react";
 
 export const Task = (props: {
   category: string;
   task: string;
   points: number;
 }) => {
+
+  const { mutate } = api.profile.addCoins.useMutation({
+  });
+
   return (
     <Card
       isPressable
       className="min-w-1/4 m-2 grow p-0"
       onClick={() => {
-        // add coins - maybe use onPress
+        mutate({coinIncrease: parseInt(props.value)})
       }}
     >
       <CardHeader className="flex justify-between">
