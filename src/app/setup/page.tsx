@@ -11,7 +11,7 @@ import {
 import React, { useEffect } from "react";
 import { api } from "~/trpc/react";
 import { LoadingPage, LoadingSpinner } from "../_components/loading";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface Category {
   id: string;
@@ -22,6 +22,7 @@ const Setup = () => {
   const [categories, setCategories] = React.useState<Category[]>([]);
   const [category, setCategory] = React.useState("");
 
+  const router = useRouter();
   const utils = api.useUtils();
 
   const { data: initData, isLoading: initDataLoading } =
@@ -34,28 +35,11 @@ const Setup = () => {
       },
     });
 
-  function updateTasks() {
-    const { data: tasksData, isLoading: tasksLoading } =
-      api.tasks.generateTasks.useQuery(undefined, {
-        refetchOnMount: false,
-        refetchOnWindowFocus: false,
-      });
-
-    const { mutate: createTasks } = api.tasks.createTasks.useMutation();
-
-    useEffect(() => {
-      const fetchAndCreateTasks = async () => {
-        if (!tasksLoading && tasksData) {
-          // TODO
-        }
-      };
-      fetchAndCreateTasks();
-    }, [tasksData, tasksLoading, createTasks]);
-
-    // For now we just create the received task
-    // For later: A screen to edit these before they are written to the database.
-    redirect("/dashboard");
-  }
+  /* const { data: tasksData, isLoading: tasksLoading } =
+   *   api.tasks.generateTasks.useQuery(undefined, {
+   *     refetchOnMount: false,
+   *     refetchOnWindowFocus: false,
+   *   }); */
 
   const { data: allCategories, isLoading: categoriesLoading } =
     api.category.getAll.useQuery();
@@ -140,7 +124,13 @@ const Setup = () => {
         </div>
         {categories.length >= 1 ? (
           <div className="mt-4 flex space-x-2 sm:mt-16 sm:flex-row sm:justify-between">
-            <Button onClick={() => updateTasks()} color="secondary">
+            <Button
+              onClick={() => {
+                router.push("/dashboard");
+                // Generate tasks for user.
+              }}
+              color="secondary"
+            >
               Dashboard
             </Button>
           </div>
