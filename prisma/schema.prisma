@@ -55,7 +55,7 @@ model History {
   categoryId String
   name       String
   points     Int
-  finishedAt DateTime
+  finishedAt DateTime @default(now())
   user       User     @relation(fields: [userId], references: [id])
   category   Category @relation(fields: [categoryId], references: [id])
 }

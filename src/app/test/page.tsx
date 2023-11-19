@@ -14,19 +14,39 @@ export default function Home() {
       <div className="mx-auto mt-16 w-11/12">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           <div className="relative">
-            <TaskModal category="Swimming" task="Get good" points={10} />
+            <TaskModal
+              taskId=""
+              category="Swimming"
+              task="Get good"
+              points={10}
+            />
           </div>
           <div className="relative">
-            <TaskModal category="Swimming" task="Get good" points={10} />
+            <TaskModal
+              taskId=""
+              category="Swimming"
+              task="Get good"
+              points={10}
+            />
           </div>
           <div className="relative">
-            <TaskModal category="Swimming" task="Get good" points={10} />
+            <TaskModal
+              taskId=""
+              category="Swimming"
+              task="Get good"
+              points={10}
+            />
           </div>
           <div className="relative">
-            <TaskModal category="Swimming" task="Get good" points={10} />
-          </div>
+            <TaskModal
+              taskId=""
+              category="Swimming"
+              task="Get good"
+              points={10}
+            />
           </div>
         </div>
+      </div>
     </main>
   );
 }

@@ -12,7 +12,6 @@ import React, { useEffect } from "react";
 import { api } from "~/trpc/react";
 import { LoadingPage, LoadingSpinner } from "../_components/loading";
 import { redirect } from "next/navigation";
-import { useRouter } from "next/router";
 
 interface Category {
   id: string;
@@ -32,9 +31,31 @@ const Setup = () => {
     api.category.create.useMutation({
       onSuccess: () => {
         void utils.category.getUsersCategories.invalidate();
-        // create tasks for a given category
       },
     });
+
+  function updateTasks() {
+    const { data: tasksData, isLoading: tasksLoading } =
+      api.tasks.generateTasks.useQuery(undefined, {
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+      });
+
+    const { mutate: createTasks } = api.tasks.createTasks.useMutation();
+
+    useEffect(() => {
+      const fetchAndCreateTasks = async () => {
+        if (!tasksLoading && tasksData) {
+          // TODO
+        }
+      };
+      fetchAndCreateTasks();
+    }, [tasksData, tasksLoading, createTasks]);
+
+    // For now we just create the received task
+    // For later: A screen to edit these before they are written to the database.
+    redirect("/dashboard");
+  }
 
   const { data: allCategories, isLoading: categoriesLoading } =
     api.category.getAll.useQuery();
@@ -118,10 +139,10 @@ const Setup = () => {
           </div>
         </div>
         {categories.length >= 1 ? (
-          <div className="mt-4 flex space-x-2 sm:mt-16 sm:flex-row sm:justify-end sm:justify-between">
-            <a href="/dashboard" className="flex grow">
-              <Button color="secondary">Dashboard</Button>
-            </a>
+          <div className="mt-4 flex space-x-2 sm:mt-16 sm:flex-row sm:justify-between">
+            <Button onClick={() => updateTasks()} color="secondary">
+              Dashboard
+            </Button>
           </div>
         ) : null}
       </div>

@@ -16,16 +16,15 @@ export const Task = (props: {
   task: string;
   points: number;
 }) => {
-
-  const { mutate } = api.profile.addCoins.useMutation({
-  });
+  const { mutate, isLoading } = api.profile.addCoins.useMutation({});
 
   return (
     <Card
+      isDisabled={isLoading}
       isPressable
       fullWidth={true}
       onClick={() => {
-        mutate({coinIncrease: props.points})
+        mutate({ coinIncrease: props.points });
       }}
     >
       <CardHeader className="flex justify-between">
@@ -33,7 +32,7 @@ export const Task = (props: {
         <div className="flex items-center">
           {props.points}
           <TbCoins />
-          <Spacer/>
+          <Spacer />
         </div>
       </CardHeader>
       <Divider />
