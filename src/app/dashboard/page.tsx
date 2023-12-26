@@ -6,11 +6,8 @@ import { TaskModal } from "../_components/TaskModal";
 import { motion } from "framer-motion";
 
 const Dashboard = () => {
-  const { data: taskData, isLoading: tasksLoading } = api.tasks.generateTasks
-    .useQuery(undefined, {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-    });
+  const { data: tasks, isLoading: tasksLoading } =
+    api.tasks.getUserTasks.useQuery();
 
   if (tasksLoading) {
     return (
@@ -29,18 +26,10 @@ const Dashboard = () => {
     );
   }
 
-  interface Task {
-    category: string;
-    task: string;
-    points: number;
-  }
-
-  const tasks: Task[] = taskData?.tasks!;
-
   return (
     <div className="mx-auto mt-16 w-11/12">
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {tasks.map((taskObj: Task, index) => (
+        {tasks!.map((task, index) => (
           <motion.div
             className="relative"
             key={index}
@@ -52,10 +41,10 @@ const Dashboard = () => {
             }}
           >
             <TaskModal
-              key={index}
-              category={taskObj.category}
-              task={taskObj.task}
-              points={taskObj.points}
+              taskId={task.id}
+              category={task.categoryName}
+              task={task.name}
+              points={task.points}
             />
           </motion.div>
         ))}

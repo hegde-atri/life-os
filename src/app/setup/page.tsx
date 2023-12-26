@@ -11,8 +11,7 @@ import {
 import React, { useEffect } from "react";
 import { api } from "~/trpc/react";
 import { LoadingPage, LoadingSpinner } from "../_components/loading";
-import { redirect } from "next/navigation";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 interface Category {
   id: string;
@@ -23,6 +22,7 @@ const Setup = () => {
   const [categories, setCategories] = React.useState<Category[]>([]);
   const [category, setCategory] = React.useState("");
 
+  const router = useRouter();
   const utils = api.useUtils();
 
   const { data: initData, isLoading: initDataLoading } =
@@ -32,9 +32,14 @@ const Setup = () => {
     api.category.create.useMutation({
       onSuccess: () => {
         void utils.category.getUsersCategories.invalidate();
-        // create tasks for a given category
       },
     });
+
+  /* const { data: tasksData, isLoading: tasksLoading } =
+   *   api.tasks.generateTasks.useQuery(undefined, {
+   *     refetchOnMount: false,
+   *     refetchOnWindowFocus: false,
+   *   }); */
 
   const { data: allCategories, isLoading: categoriesLoading } =
     api.category.getAll.useQuery();
@@ -118,10 +123,16 @@ const Setup = () => {
           </div>
         </div>
         {categories.length >= 1 ? (
-          <div className="mt-4 flex space-x-2 sm:mt-16 sm:flex-row sm:justify-end sm:justify-between">
-            <a href="/dashboard" className="flex grow">
-              <Button color="secondary">Dashboard</Button>
-            </a>
+          <div className="mt-4 flex space-x-2 sm:mt-16 sm:flex-row sm:justify-between">
+            <Button
+              onClick={() => {
+                router.push("/dashboard");
+                // Generate tasks for user.
+              }}
+              color="secondary"
+            >
+              Dashboard
+            </Button>
           </div>
         ) : null}
       </div>
