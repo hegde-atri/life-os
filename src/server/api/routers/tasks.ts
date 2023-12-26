@@ -1,7 +1,4 @@
-import {
-  createTRPCRouter,
-  protectedProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 import OpenAI from "openai";
 import { z } from "zod";
@@ -47,7 +44,7 @@ export const tasksRouter = createTRPCRouter({
     let tasks: Task[] = [];
 
     const validCategories = cleanCategories(categories);
-    console.log("validCategories", validCategories)
+    console.log("validCategories", validCategories);
 
     // Handle case where user has no selected categories and prevent api call
     if (validCategories.length == 0) {
@@ -56,7 +53,7 @@ export const tasksRouter = createTRPCRouter({
         task: "No valid categories selected!",
         points: 0,
       });
-      console.log(tasks)
+      console.log(tasks);
       return { tasks: tasks };
     }
 
@@ -66,8 +63,7 @@ export const tasksRouter = createTRPCRouter({
       messages: [
         {
           role: "system",
-          content:
-            `Generate ${count} *self-enclosing* personal development tasks that someone could do for each category provided, assign each a corresponding difficulty value (0-40). Format json: {category: {task: value, task: value...},}. Don't add markdown. Eg. {"Swimming": {"Swim 500m non-stop": 15,...},}`,
+          content: `Generate ${count} *self-enclosing* personal development tasks that someone could do for each category provided, assign each a corresponding difficulty value (0-40). Format json: {category: {task: value, task: value...},}. Don't add markdown. Eg. {"Swimming": {"Swim 500m non-stop": 15,...},}`,
         },
         {
           role: "user",
@@ -77,18 +73,27 @@ export const tasksRouter = createTRPCRouter({
       model: "gpt-3.5-turbo-1106",
     });
 
-    const GPTObj = JSON.parse(chatCompletion.choices[0]?.message.content!);
+    try {
+      const GPTObj = JSON.parse(chatCompletion.choices[0]?.message.content!);
+      console.log(GPTObj);
 
-    console.log(GPTObj);
-
-    for (let category in GPTObj) {
-      for (let task in GPTObj[category]) {
-        tasks.push({
-          category: category,
-          task: task,
-          points: GPTObj[category][task],
-        });
+      for (let category in GPTObj) {
+        for (let task in GPTObj[category]) {
+          tasks.push({
+            category: category,
+            task: task,
+            points: GPTObj[category][task],
+          });
+        }
       }
+    } catch (error) { // If the response is unable to be parsed correctly
+      tasks.push({
+        category: "Error",
+        task: "Potential JSON Parse Error - See console for further info.",
+        points: 0,
+      });
+      console.log("The following input caused an error:");
+      console.log(validCategories.toString());
     }
 
     // console.log(tasks);
