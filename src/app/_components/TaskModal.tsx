@@ -69,7 +69,7 @@ export const TaskModal = (props: {
                 <Button
                   color="primary"
                   onPress={onClose}
-                  onClick={() => mutate({ taskId: "", name: "", points: 0 })}
+                  onClick={() => mutate({ taskId: "", task: "", points: 0 })}
                 >
                   Save
                 </Button>
